@@ -1,7 +1,9 @@
 package com.example.demo;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class DiccionarySuggest {
 
@@ -13,11 +15,40 @@ public class DiccionarySuggest {
                 "bfhr abcri abc94 abc43 ab31 abcd ab",
         };
 
+        Map<Character, String> diccio = saveDicctionary(pages);
+
         List<String> startWith = searchStartWith(pages, "abc");
 
         for (String word : startWith) {
             System.out.println(word + ", ");
         }
+    }
+
+
+    public static Map<Character, String> saveDicctionary(String[] pages) {
+
+        Map<Character, String> diccMap = new HashMap<>();
+
+        int starInd = 0, endInd = 0;
+        for (int ind = 0; ind < pages.length; ind++) {
+
+            while (endInd < pages[ind].length()) {
+                endInd = findIndexWordSeparator(pages[ind], starInd);
+                String word = getWordWithPrefix(pages[ind], starInd, endInd - 1);
+                starInd = endInd;
+                if (diccMap.get(word.charAt(0)) == null) {
+                    diccMap.put(word.charAt(0), word);
+                } else {
+                    diccMap.put(word.charAt(0), diccMap.get(word.charAt(0)) + " " + word);
+                }
+
+            }
+            endInd = 0;
+            starInd = 0;
+
+        }
+
+        return diccMap;
     }
 
 
@@ -73,7 +104,7 @@ public class DiccionarySuggest {
         return startIndex + 1;
     }
 
-    public static String getWordWithPrefix(String words, int startIndex,int endIndex ) {
+    public static String getWordWithPrefix(String words, int startIndex, int endIndex) {
         String word = new String();
 
         for (int i = startIndex; i < endIndex; i++) {
