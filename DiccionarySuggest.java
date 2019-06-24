@@ -10,18 +10,18 @@ public class DiccionarySuggest {
         String[] pages = new String[]{
                 "abceui jij wwi amn, 29 abdjdj jfjg",
                 "bfbg abcuur kdk ns acjn ",
-                "bfhr abcri abc94 ",
+                "bfhr abcri abc94 abc43 ab31 abcd ab",
         };
 
-        List<String> startWith = search(pages, "abc");
+        List<String> startWith = searchStartWith(pages, "abc");
 
-       for(String word:startWith){
-           System.out.println(word + ", ");
-       }
+        for (String word : startWith) {
+            System.out.println(word + ", ");
+        }
     }
 
 
-    public static List<String> search(String[] pages, String prefix) {
+    public static List<String> searchStartWith(String[] pages, String prefix) {
 
         int PAGES_LENGTH = pages.length;
         int PREFIX_LENGTH = prefix.length();
@@ -34,30 +34,28 @@ public class DiccionarySuggest {
 
             String words = pages[index1];
 
-            int indexStartWith = 0;
+            int prefixInd = 0;
 
-            int indexWord = 0;
+            int lineInd = 0;
 
             int posNextStart = 0;
 
 
-            while (indexWord < LINE_LENGTH) {
+            while (lineInd < LINE_LENGTH) {
 
-
-                if (indexStartWith < PREFIX_LENGTH &&
-                        isEqual(words.charAt(indexWord), prefix.charAt(indexStartWith))) {
-                    indexStartWith++;
-                    indexWord++;
-                } else if (indexStartWith != PREFIX_LENGTH) {
-                    posNextStart = findIndexWordSeparator(words, indexWord);
-                    indexStartWith = 0;
-                    indexWord = posNextStart;
+                if (prefixInd < PREFIX_LENGTH &&
+                        isEqual(words.charAt(lineInd), prefix.charAt(prefixInd))) {
+                    prefixInd++;
+                    lineInd++;
+                } else if (prefixInd != PREFIX_LENGTH) {
+                    posNextStart = findIndexWordSeparator(words, lineInd);
+                    prefixInd = 0;
+                    lineInd = posNextStart;
                 } else {
-
-                    wordFound.add(getWordWithPrefix(words, indexWord - PREFIX_LENGTH, posNextStart - 1));
-                    indexStartWith = 0;
-                    posNextStart = findIndexWordSeparator(words, indexWord);
-                    indexWord = posNextStart;
+                    posNextStart = findIndexWordSeparator(words, lineInd);
+                    wordFound.add(getWordWithPrefix(words, lineInd - PREFIX_LENGTH, posNextStart - 1));
+                    prefixInd = 0;
+                    lineInd = posNextStart;
                 }
 
 
@@ -75,9 +73,9 @@ public class DiccionarySuggest {
         return startIndex + 1;
     }
 
-    public static String getWordWithPrefix(String words, int startIndex, int endIndexd) {
-        int endIndex = findIndexWordSeparator(words, startIndex) - 1;
+    public static String getWordWithPrefix(String words, int startIndex,int endIndex ) {
         String word = new String();
+
         for (int i = startIndex; i < endIndex; i++) {
             word += words.charAt(i);
         }
