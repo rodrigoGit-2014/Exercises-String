@@ -13,8 +13,7 @@ public class LargestSubstring {
 
         int duplicateCount = 1, auxDuplicateCount = 0, start = 0, end = 0;
 
-        boolean visited = false;
-
+    
         for (int ind = 1; ind < line.length; ind++) {
 
             if (line[ind - 1] != line[ind]) {
