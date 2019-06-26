@@ -1,11 +1,13 @@
-package com.example.demo.pangram.exercice;
+package two.list.sorted;
 
 public class LargestSubstring {
-
     public static void main(String[] args) {
 
-        char[] booleans = new char[]{'#', '*', '#', '#', '*', '*', '*', '#', '#', '#', '*', '*', '#'};
-       // char[] booleans = new char[]{'#', '*', '#', '*', '#', '*', '#', '*', '#', '*', '#', '*', '#'};
+        // char[] booleans = new char[]{'#', '*', '#', '#', '*', '*', '*', '#', '#', '#', '*', '*', '#'};//expected :#*##***###**
+        //  char[] booleans = new char[]{'#', '*', '#', '*', '#', '*', '#', '*', '#', '*', '#', '*', '#'};//expected  :#*#*#*#*#*#*
+        //  char[] booleans = new char[]{'#', '#', '#', '#', '#', '#', '*', '*', '*', '*', '*', '*', '#'};//expected : ######******
+        //char[] booleans = new char[]{'#', '*', '#', '#', '#', '*', '*', '#', '#', '#', '#', '#', '#'};//expected : *###**
+        char[] booleans = new char[]{'#', '#', '#', '#', '*', '*', '*', '*', '*', '*', '*', '*', '#', '#'};//expected : ####****
         String cc = largestSubstring(booleans);
         System.out.println(cc);
 
@@ -13,32 +15,52 @@ public class LargestSubstring {
     }
 
 
-    public static String largestSubstringV2(char[] line) {
+    public static String largestSubstring(char[] line) {
 
         int counterHash = 0, counterAsterik = 0, start = 0, end = 0;
+        int counterReverseHash = 0, counterReverseAsterik = 0;
+
+        int center = line.length / 2;
 
 
         for (int ind = 0; ind < line.length; ind++) {
 
-            if ('*' == line[ind]) counterAsterik++;
-            if ('#' == line[ind]) counterHash++;
+            if (ind < center) {
+                if ('*' == line[line.length - (ind + 1)]) {
+                    counterReverseAsterik++;
 
-            int diffCounter = counterAsterik > counterHash ? counterAsterik - counterHash : counterHash - counterAsterik;
-            int diffNextElements = (line.length - ind) - 1;
-
-            if (diffNextElements > diffCounter) {
-                end = ind;
-            } else {
-                end = ind - 1;
+                }
+                if ('#' == line[line.length - (ind + 1)]) {
+                    counterReverseHash++;
+                }
+            }
+            if ('*' == line[ind]) {
+                counterAsterik++;
+            }
+            if ('#' == line[ind]) {
+                counterHash++;
             }
 
+            int diffCounter = counterAsterik > counterHash ? counterAsterik - counterHash : counterHash - counterAsterik;
+
+            if (diffCounter == 0) {
+                end = ind;
+            }
+            if ((counterReverseAsterik == 0 || 0 == counterReverseHash) && ind == center) {
+                start = end;
+                end = ind;
+                counterReverseAsterik = -1;
+                counterReverseHash = -1;
+            }
+
+
         }
-        System.out.println();
+
         return buildString(start, end, line);
     }
 
 
-    public static String largestSubstring(char[] line) {
+   /* public static String largestSubstring(char[] line) {
 
         int duplicateCount = 1, auxDuplicateCount = 0, start = 0, end = 0;
 
@@ -59,7 +81,7 @@ public class LargestSubstring {
         }
 
         return buildString(start, end, line);
-    }
+    }*/
 
 
     private static String buildString(int start, int end, char[] line) {
@@ -69,4 +91,6 @@ public class LargestSubstring {
         }
         return substring;
     }
+
+
 }
